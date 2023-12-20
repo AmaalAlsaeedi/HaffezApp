@@ -1,0 +1,87 @@
+//
+//  ContentView.swift
+//  NotificationsApp
+//
+//  Created by Amaal Ali Alsaeedi on 06/06/1445 AH.
+//
+
+import SwiftUI
+import UserNotifications
+
+struct ContentView: View {
+    @State var selectedDate = Date()
+    @State var selectedDate2 = Date()
+    @State var notificationCount = 1
+    let notify = NotificationHandler()
+        
+    var body: some View {
+        VStack(spacing: 20) {
+            Spacer()
+                        Stepper(value: $notificationCount, in: 0...5, step: 1) {
+                            Text("No. notification: \(notificationCount)")
+                        }
+//            Button(""){
+//                
+//            }
+//            Button("Send notification in 5 seconds") {
+//                notify.sendNotification(date: Date(), type: "time", timeInterval: 5, title: "5 second notification", body: "You can write more in here!")
+//                        }
+                        DatePicker("Pick the Start time:", selection: $selectedDate, displayedComponents: [.hourAndMinute])
+                        DatePicker("Pick the End time:", selection: $selectedDate2, displayedComponents: [.hourAndMinute])
+                              // Remove the DatePicker line
+            Button("Schedule notification") {
+                            notify.sendNotification(date: selectedDate, type: "date", timeInterval: 0, title: "Scheduled notification", body: "This notification is scheduled at a specific date and time.")
+                        }
+                        .accentColor(.orange)
+                        Spacer()
+                        Text("Not working?")
+                            .foregroundColor(.gray)
+                            .italic()
+                        Button("Request permissions") {
+                            notify.askPermission()
+                        }
+                    }
+                    .padding()
+                }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+
+//class NotificationHandler1 {
+//    func sendNotification(date: Date, type: String, timeInterval: TimeInterval, title: String, body: String) {
+//        let content = UNMutableNotificationContent()
+//        content.title = title
+//        content.body = body
+//        
+//        let trigger: UNNotificationTrigger
+//        if type == "time" {
+//            trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
+//        } else if type == "date" {
+//            let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+//            trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+//        } else {
+//            fatalError("Invalid notification type")
+//        }
+//        
+//        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+//        UNUserNotificationCenter.current().add(request) { error in
+//            if let error = error {
+//                print("Failed to schedule notification: \(error)")
+//            }
+//        }
+//    }
+//    
+//    func askPermission() {
+//        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+//            if granted {
+//                print("Notification permission granted")
+//            } else if let error = error {
+//                print("Failed to request notification permission: \(error)")
+//            }
+//        }
+//    }
+//}
